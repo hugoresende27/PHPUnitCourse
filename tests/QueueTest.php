@@ -54,11 +54,33 @@ class QueueTest extends TestCase
     {
         static::$queue->push('red');
         static::$queue->push('green');
-        var_dump(static::$queue);
         $firstItem = static::$queue->pop();
         $secondItem = static::$queue->pop();
         $this->assertEquals('green',$firstItem);
         $this->assertEquals('red',$secondItem);
     }
 
+
+    public function testMaxNumberOfItemsCanBeAdded()
+    {
+        $count = 0;
+        while ($count < Queue::MAX_ITEMS) {
+            static::$queue->push($count);
+            $count++;
+        }
+        $this->assertEquals(5,static::$queue->getCount());
+
+    }
+    public function testExceptionThrownWhenAddingAnItemToAFullQueue()
+    {
+        $count = 0;
+        while ($count < Queue::MAX_ITEMS) {
+            static::$queue->push($count);
+            $count++;
+        }
+        $this->expectException(QueueException::class);
+        static::$queue->push('one More');
+   
+
+    }
 }
