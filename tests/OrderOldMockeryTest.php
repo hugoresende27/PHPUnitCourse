@@ -2,7 +2,7 @@
 use PHPUnit\Framework\TestCase;
 
 
-class OrderMockeryTest extends TestCase
+class OrderOldMockeryTest extends TestCase
 {
 
     public function tearDown(): void
@@ -11,7 +11,7 @@ class OrderMockeryTest extends TestCase
     }
 
 
-    public function testOrderIsProcessed()
+    public function testOrderOldIsProcessed()
     {
         $gateway = $this->getMockBuilder('PaymentGateway')
                         ->setMethods(['charge'])
@@ -22,14 +22,14 @@ class OrderMockeryTest extends TestCase
                 ->with($this->equalTo(200))
                 ->willReturn(true);
 
-        $order = new Order($gateway);
+        $orderOld = new OrderOld($gateway);
 
-        $order->amount = 200;
+        $orderOld->amount = 200;
 
-        $this->assertTrue($order->process());
+        $this->assertTrue($orderOld->process());
     }
 
-    public function testOrderIsProcessedUsingMockery()
+    public function testOrderOldIsProcessedUsingMockery()
     {
 
         $gateway = Mockery::mock('PaymentGateway');
@@ -39,11 +39,11 @@ class OrderMockeryTest extends TestCase
                 ->with(200)
                 ->andReturn(true);
 
-        $order = new Order($gateway);
+        $orderOld = new OrderOld($gateway);
 
-        $order->amount = 200;
+        $orderOld->amount = 200;
 
-        $this->assertTrue($order->process());
+        $this->assertTrue($orderOld->process());
     }
 
 }

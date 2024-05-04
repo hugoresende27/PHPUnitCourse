@@ -5,22 +5,38 @@ use PHPUnit\Framework\TestCase;
 class OrderTest extends TestCase
 {
 
-    public function testOrderIsProcessed()
+    public function tearDown(): void
     {
-        $gateway = $this->getMockBuilder('PaymentGateway')
-                        ->setMethods(['charge'])
-                        ->getMock();
+        Mockery::close();
+    }
 
-        $gateway->expects($this->once())
-                ->method('charge')
-                ->with($this->equalTo(200))
-                ->willReturn(true);
+    public function testOrderIsProcessedUsingAMock()
+    {
+        $order = new Order(3, 1.99);
 
-        $order = new Order($gateway);
+        $this->assertEquals(5.97, $order->amount);
 
-        $order->amount = 200;
+        $gatewayMock = Mockery::mock('PaymentGateway');
 
-        $this->assertTrue($order->process());
+        $gatewayMock->shouldReceive('charge')
+                    ->once()
+                    ->with(5.97);
+
+        $order->process($gatewayMock);
+    }
+    public function testOrderIsProcessedUsingASpy()
+    {
+        $order = new Order(3, 1.99);
+        
+        $this->assertEquals(5.97, $order->amount);
+
+        $gatewaySpy = Mockery::spy('PaymentGateway');
+        
+        $order->process($gatewaySpy);
+
+        $gatewaySpy->shouldHaveReceived('charge')
+                    ->once()
+                    ->with(5.97);
     }
 
 }
