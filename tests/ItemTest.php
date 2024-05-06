@@ -44,6 +44,18 @@ class ItemTest extends TestCase
         $this->assertIsString($result);
     }
 
+
+    public function testPrefixedTokenStartsWithPrefix()
+    {
+        $item = new App\ItemChild;
+        $reflector = new ReflectionClass(Item::class);
+        $method = $reflector->getMethod('getPrefixedToken');
+        $method->setAccessible(true);
+        $result = $method->invokeArgs($item, ['example']);
+        $this->assertIsString($result);
+        $this->assertStringStartsWith('example',$result);
+    }
+
     
 
 }
