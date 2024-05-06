@@ -42,4 +42,41 @@ class ArticleTest extends MockeryTestCase
         $this->assertEquals($this->article->getSlug(), "An_example_article");
     }
 
+    public function testSlugDoesNotHaveAnyNonWordCharacters()
+    {
+        $this->article->title = "Read! This! Now!";
+        $this->assertEquals($this->article->getSlug(), "Read_This_Now");
+    }
+
+    /**
+     * [Description for testSlug]
+     * this replace all tests above
+     * @param mixed $title
+     * @param mixed $slug
+     * @dataProvider titleProvider
+     * @return [type]
+     * 
+     */
+    public function testSlug($title, $slug)
+    {
+        $this->article->title = $title;
+        $this->assertEquals($this->article->getSlug(), $slug);
+    }
+
+    /**
+     * [titleProvider]
+     * used with annotation @dataProvider function
+     * @return [type]
+     * 
+     */
+    public function titleProvider()
+    {
+        return [
+            "slug has spaces replaced by underscores" => ["An example article","An_example_article"], // with data set "slug has spaces replaced by underscores"
+            "slug has spaces replaced by single underscores" =>[" An example article ","An_example_article"],
+            "slug does not start or end with underscores" =>["An    example    \n  article", "An_example_article"], // ArticleTest::testSlug with data set #2 
+            "slug does not have any non word chars" =>["Read! This! Now!", "Read_This_Now"]
+        ];
+    }
+
 }
