@@ -25,10 +25,12 @@ class User
 
     protected Mailer $mailer;
 
+
     public function setMailer(Mailer $mailer)
     {
         $this->mailer = $mailer;
     }
+
 
     /**
      * Get the user's full name from their first name and surname

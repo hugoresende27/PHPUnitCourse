@@ -13,9 +13,18 @@ class UserTwoTest extends TestCase
 
         $user = new UserTwo('Hugo');
 
-        $mailer = new Mailer;
-        $user->setMailer($mailer);
-               
+        // $mailer = new Mailer;
+        // $user->setMailerCallable([Mailer::class, 'send']);
+
+        $user->setMailerCallable(function () {
+
+            echo "mocked";
+
+            return true;
+
+        });
+
+        // $user->setMailer($mailer);
         // $mailer = $this->createMock(Mailer::class);
         // $mailer->method('send')
         //         ->willReturn(true);

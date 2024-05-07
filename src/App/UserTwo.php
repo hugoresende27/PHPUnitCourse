@@ -14,6 +14,8 @@ class UserTwo
      */
     public $email;
 
+    protected  $mailer_callable;
+
     /**
      * Mailer object
      * @var Mailer
@@ -51,11 +53,25 @@ class UserTwo
      *
      * @return boolean
      */
-    public function notify(string $message)
+    public function notifyOld(string $message)
     {
 
         // $mailer = new Mailer;
         return $this->mailer->send($this->email, $message);
 
+    }
+
+    
+    public function notify(string $message)
+    {
+
+        return call_user_func([Mailer::class, 'send'], $this->email, $message);
+
+    }
+
+
+    public function setMailerCallable(callable $mailer_callable)
+    {
+        $this->mailer_callable = $mailer_callable;
     }
 }
